@@ -5,6 +5,8 @@ import org.skypro.skyshop.product.SimpleProduct;
 import org.skypro.skyshop.product.DiscountedProduct;
 import org.skypro.skyshop.product.FixPriceProduct;
 import org.skypro.skyshop.basket.ProductBasket;
+import org.skypro.skyshop.search.*;
+import org.skypro.skyshop.article.Article;
 
 public class App {
     public static void main(String[] args) {
