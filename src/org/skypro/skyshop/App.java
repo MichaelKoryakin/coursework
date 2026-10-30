@@ -1,35 +1,47 @@
-package org.skypro.skyshop;
-
-import org.skypro.skyshop.product.Product;
-import org.skypro.skyshop.product.SimpleProduct;
-import org.skypro.skyshop.product.DiscountedProduct;
-import org.skypro.skyshop.product.FixPriceProduct;
-import org.skypro.skyshop.basket.ProductBasket;
-import org.skypro.skyshop.search.*;
+import org.skypro.skyshop.product.*;
 import org.skypro.skyshop.article.Article;
+import org.skypro.skyshop.search.*;
 
 public class App {
     public static void main(String[] args) {
-        Product p1 = new SimpleProduct("Молоко", 50);
-        Product p2 = new DiscountedProduct("Сыр", 120, 20);
-        Product p3 = new FixPriceProduct("Масло");
-        Product p4 = new SimpleProduct("Хлеб", 30);
-        Product p5 = new DiscountedProduct("Кофе", 200, 10);
-        Product p6 = new FixPriceProduct("Чай");
+        // Демонстрация ошибок создания продуктов
+        try {
+            Product p = new SimpleProduct("   ", 100);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка при создании продукта: " + e.getMessage());
+        }
+        try {
+            Product p = new SimpleProduct("Молоко", 0);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка при создании продукта: " + e.getMessage());
+        }
+        try {
+            Product p = new DiscountedProduct("Сыр", 100, 200);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка при создании продукта: " + e.getMessage());
+        }
 
-        ProductBasket basket = new ProductBasket();
-        basket.addProduct(p1);
-        basket.addProduct(p2);
-        basket.addProduct(p3);
-        basket.addProduct(p4);
-        basket.addProduct(p5);
-        basket.addProduct(p6); // шестой не добавится, если корзина на 5 товаров
+        // Добавление товаров и статей
+        SearchEngine engine = new SearchEngine(10);
+        engine.add(new SimpleProduct("Сыр", 300));
+        engine.add(new SimpleProduct("Молоко", 100));
+        engine.add(new Article("Как выбрать сыр", "Инструкция по выбору сыра сыр сыр сыр"));
+        engine.add(new Article("Лучший кофе", "Пять советов по выбору кофе"));
 
-        basket.printBasket();
-        System.out.println("Стоимость корзины: " + basket.getTotalPrice());
-        System.out.println("Есть ли сыр? " + basket.hasProduct("Сыр"));
-        System.out.println("Есть ли чай? " + basket.hasProduct("Чай"));
-        basket.clear();
-        basket.printBasket();
+        // Поиск best — успех
+        try {
+            Searchable best = engine.searchBest("сыр");
+            System.out.println("Лучший результат: " + best.getStringRepresentation());
+        } catch (BestResultNotFound e) {
+            System.out.println(e.getMessage());
+        }
+
+        // Поиск best — не найден
+        try {
+            Searchable best = engine.searchBest("несуществующее слово");
+            System.out.println("Лучший результат: " + best.getStringRepresentation());
+        } catch (BestResultNotFound e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

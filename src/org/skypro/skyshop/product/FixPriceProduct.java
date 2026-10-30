@@ -4,7 +4,7 @@ public class FixPriceProduct extends Product {
     private static final int FIXED_PRICE = 150;
 
     public FixPriceProduct(String name) {
-        super(name);
+        super(name, FIXED_PRICE);
     }
 
     @Override
@@ -12,7 +12,7 @@ public class FixPriceProduct extends Product {
         return FIXED_PRICE;
     }
 
-    @Override
+    // Просто убираем @Override, если в Product нет такого метода
     public boolean isSpecial() {
         return true;
     }
