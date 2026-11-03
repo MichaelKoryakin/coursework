@@ -20,4 +20,9 @@ public class Product {
     public boolean isSpecial() {
         return false;
     }
+
+    @Override
+    public String toString() {
+        return name + ": " + price;
+    }
 }

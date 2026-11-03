@@ -1,51 +1,22 @@
 package org.skypro.skyshop.search;
 
-public class SearchEngine {
-    private final Searchable[] items;
-    private int count = 0;
+import java.util.LinkedList;
+import java.util.List;
 
-    public SearchEngine(int size) {
-        items = new Searchable[size];
-    }
+public class SearchEngine {
+    private final List<Searchable> items = new LinkedList<>();
+
     public void add(Searchable s) {
-        if (count < items.length) {
-            items[count++] = s;
-        }
+        items.add(s);
     }
-    public Searchable[] search(String query) {
-        Searchable[] results = new Searchable[5];
-        int found = 0;
+
+    public List<Searchable> search(String searchTerm) {
+        List<Searchable> results = new LinkedList<>();
         for (Searchable s : items) {
-            if (s != null && s.getSearchTerm().contains(query)) {
-                results[found++] = s;
-                if (found == 5) break;
+            if (s.getSearchTerm().contains(searchTerm)) {
+                results.add(s);
             }
         }
         return results;
-    }
-    public Searchable searchBest(String search) throws BestResultNotFound {
-        int max = 0;
-        Searchable best = null;
-        for (Searchable s : items) {
-            if (s == null) continue;
-            int count = countOccurrences(s.getSearchTerm(), search);
-            if (count > max) {
-                max = count;
-                best = s;
-            }
-        }
-        if (best == null || max == 0) {
-            throw new BestResultNotFound(search);
-        }
-        return best;
-    }
-    private int countOccurrences(String str, String sub) {
-        int count = 0, idx = 0;
-        if (sub == null || sub.isEmpty()) return 0;
-        while ((idx = str.indexOf(sub, idx)) != -1) {
-            count++;
-            idx += sub.length();
-        }
-        return count;
     }
 }

@@ -1,47 +1,39 @@
 import org.skypro.skyshop.product.*;
 import org.skypro.skyshop.article.Article;
 import org.skypro.skyshop.search.*;
+import org.skypro.skyshop.basket.ProductBasket;
+import java.util.List;
 
 public class App {
     public static void main(String[] args) {
-        // Демонстрация ошибок создания продуктов
-        try {
-            Product p = new SimpleProduct("   ", 100);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Ошибка при создании продукта: " + e.getMessage());
-        }
-        try {
-            Product p = new SimpleProduct("Молоко", 0);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Ошибка при создании продукта: " + e.getMessage());
-        }
-        try {
-            Product p = new DiscountedProduct("Сыр", 100, 200);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Ошибка при создании продукта: " + e.getMessage());
-        }
+        ProductBasket basket = new ProductBasket();
+        basket.add(new SimpleProduct("Молоко", 100));
+        basket.add(new SimpleProduct("Хлеб", 50));
+        basket.add(new SimpleProduct("Молоко", 120));
+        basket.add(new SimpleProduct("Сыр", 250));
 
-        // Добавление товаров и статей
-        SearchEngine engine = new SearchEngine(10);
-        engine.add(new SimpleProduct("Сыр", 300));
-        engine.add(new SimpleProduct("Молоко", 100));
-        engine.add(new Article("Как выбрать сыр", "Инструкция по выбору сыра сыр сыр сыр"));
-        engine.add(new Article("Лучший кофе", "Пять советов по выбору кофе"));
-
-        // Поиск best — успех
-        try {
-            Searchable best = engine.searchBest("сыр");
-            System.out.println("Лучший результат: " + best.getStringRepresentation());
-        } catch (BestResultNotFound e) {
-            System.out.println(e.getMessage());
+        // Удалить существующий продукт
+        List<Product> deleted = basket.removeByName("Молоко");
+        System.out.println("Удалённые продукты:");
+        if (deleted.isEmpty()) {
+            System.out.println("Список пуст");
+        } else {
+            for (Product p : deleted) {
+                System.out.println(p);
+            }
         }
+        basket.printBasket();
 
-        // Поиск best — не найден
-        try {
-            Searchable best = engine.searchBest("несуществующее слово");
-            System.out.println("Лучший результат: " + best.getStringRepresentation());
-        } catch (BestResultNotFound e) {
-            System.out.println(e.getMessage());
+        // Удалить несуществующий продукт
+        List<Product> deleted2 = basket.removeByName("Кефир");
+        System.out.println("Удалённые продукты:");
+        if (deleted2.isEmpty()) {
+            System.out.println("Список пуст");
+        } else {
+            for (Product p : deleted2) {
+                System.out.println(p);
+            }
         }
+        basket.printBasket();
     }
 }

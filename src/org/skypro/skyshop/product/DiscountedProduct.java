@@ -15,4 +15,12 @@ public class DiscountedProduct extends Product {
         this.basePrice = basePrice;
         this.discount = discount;
     }
+
+    public int getBasePrice() {
+        return basePrice;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
 }

@@ -19,6 +19,6 @@ public class SimpleProduct extends Product implements Searchable {
 
     @Override
     public String getSearchTerm() {
-        return getName(); // или другое подходящее поле
+        return getName();
     }
 }

@@ -12,7 +12,7 @@ public class FixPriceProduct extends Product {
         return FIXED_PRICE;
     }
 
-    // Просто убираем @Override, если в Product нет такого метода
+    @Override
     public boolean isSpecial() {
         return true;
     }

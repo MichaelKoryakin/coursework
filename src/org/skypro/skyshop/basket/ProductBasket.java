@@ -1,62 +1,38 @@
 package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Iterator;
 
 public class ProductBasket {
-    private final Product[] products = new Product[5];
+    private final List<Product> products = new LinkedList<>();
 
-    public void addProduct(Product product) {
-        for (int i = 0; i < products.length; i++) {
-            if (products[i] == null) {
-                products[i] = product;
-                return;
-            }
-        }
-        System.out.println("Корзина заполнена");
+    public void add(Product product) {
+        products.add(product);
     }
 
-    public void clear() {
-        for (int i = 0; i < products.length; i++) {
-            products[i] = null;
-        }
-    }
-
-    public boolean hasProduct(String name) {
-        for (Product product : products) {
-            if (product != null && product.getName().equalsIgnoreCase(name)) {
-                return true;
+    public List<Product> removeByName(String name) {
+        List<Product> removed = new LinkedList<>();
+        Iterator<Product> iterator = products.iterator();
+        while (iterator.hasNext()) {
+            Product p = iterator.next();
+            if (p.getName().equals(name)) {
+                removed.add(p);
+                iterator.remove();
             }
         }
-        return false;
-    }
-
-    public int getTotalPrice() {
-        int sum = 0;
-        for (Product product : products) {
-            if (product != null) {
-                sum += product.getPrice();
-            }
-        }
-        return sum;
+        return removed;
     }
 
     public void printBasket() {
-        int specialCount = 0;
-        boolean isEmpty = true;
-        for (Product product : products) {
-            if (product != null) {
-                System.out.println(product.toString());
-                isEmpty = false;
-                if (product.isSpecial()) {
-                    specialCount++;
-                }
-            }
-        }
-        if (isEmpty) {
+        if (products.isEmpty()) {
             System.out.println("В корзине пусто");
         } else {
-            System.out.println("Итого: " + getTotalPrice());
-            System.out.println("Специальных товаров: " + specialCount);
+            System.out.println("Содержимое корзины:");
+            for (Product p : products) {
+                System.out.println(p);
+            }
         }
     }
 }
