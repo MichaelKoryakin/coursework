@@ -3,6 +3,7 @@ import org.skypro.skyshop.article.Article;
 import org.skypro.skyshop.search.*;
 import org.skypro.skyshop.basket.ProductBasket;
 import java.util.List;
+import java.util.Map;
 
 public class App {
     public static void main(String[] args) {
@@ -35,5 +36,22 @@ public class App {
             }
         }
         basket.printBasket();
+
+        // Демонстрация поиска
+        SearchEngine engine = new SearchEngine();
+        engine.add(new SimpleProduct("Яблоко", 80));
+        engine.add(new SimpleProduct("Груша", 90));
+        engine.add(new Article("Рецепт яблочного пирога", "Очень вкусно!"));
+        engine.add(new Article("Груши в кулинарии", "Разные способы приготовления груш."));
+
+        System.out.println("\nРезультаты поиска по слову 'Груша':");
+        Map<String, Searchable> found = engine.search("Груша");
+        if (found.isEmpty()) {
+            System.out.println("Ничего не найдено");
+        } else {
+            for (Searchable s : found.values()) {
+                System.out.println(s.getStringRepresentation());
+            }
+        }
     }
 }
