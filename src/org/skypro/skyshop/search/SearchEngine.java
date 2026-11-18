@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Comparator;
+import java.util.stream.Collectors;
 
 public class SearchEngine {
     private final Set<Searchable> items = new HashSet<>();
@@ -20,12 +21,8 @@ public class SearchEngine {
             }
             return a.getName().compareTo(b.getName());
         };
-        Set<Searchable> results = new TreeSet<>(comparator);
-        for (Searchable s : items) {
-            if (s.getSearchTerm().contains(searchTerm)) {
-                results.add(s);
-            }
-        }
-        return results;
+        return items.stream()
+                .filter(s -> s.getSearchTerm().contains(searchTerm))
+                .collect(Collectors.toCollection(() -> new TreeSet<>(comparator)));
     }
 }

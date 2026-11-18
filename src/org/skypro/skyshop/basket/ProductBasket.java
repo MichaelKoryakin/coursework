@@ -1,11 +1,7 @@
 package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Collection;
+import java.util.*;
 
 public class ProductBasket {
     private final Map<String, List<Product>> products = new HashMap<>();
@@ -19,16 +15,32 @@ public class ProductBasket {
         return removed != null ? removed : new ArrayList<>();
     }
 
+    public int getTotalPrice() {
+        return products.values().stream()
+                .flatMap(Collection::stream)
+                .mapToInt(Product::getPrice)
+                .sum();
+    }
+
     public void printBasket() {
         if (products.isEmpty()) {
             System.out.println("В корзине пусто");
         } else {
             System.out.println("Содержимое корзины:");
-            for (Map.Entry<String, List<Product>> entry : products.entrySet()) {
-                for (Product p : entry.getValue()) {
-                    System.out.println(p);
-                }
-            }
+            products.values().stream()
+                    .flatMap(Collection::stream)
+                    .forEach(System.out::println);
         }
+    }
+
+    private long getSpecialCount() {
+        return products.values().stream()
+                .flatMap(Collection::stream)
+                .filter(Product::isSpecial)
+                .count();
+    }
+
+    public void printSpecialCount() {
+        System.out.println("Специальных продуктов: " + getSpecialCount());
     }
 }
